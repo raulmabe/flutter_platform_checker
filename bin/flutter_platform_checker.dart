@@ -30,9 +30,14 @@ void main() async {
       'Checking your packages on pub.dev... (This can take some time)'.blue());
 
   for (final package in dependencies.keys) {
-    final res = await client.packageMetrics(package);
+    late final PackageMetrics? res;
+    try {
+      res = await client.packageMetrics(package);
+    } catch (e) {
+      res = null;
+    }
 
-    final derivedTags = res.scorecard.derivedTags;
+    final derivedTags = res?.scorecard.derivedTags;
 
     if (derivedTags == null &&
         !['flutter', 'flutter_localizations'].contains(package)) {
@@ -42,7 +47,7 @@ void main() async {
 
     String check(String platform) {
       return (['flutter', 'flutter_localizations'].contains(package) ||
-              derivedTags.contains('platform:$platform'))
+              derivedTags!.contains('platform:$platform'))
           ? '✓YES'.green()
           : '✗NO'.red();
     }
