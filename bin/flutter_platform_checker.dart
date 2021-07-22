@@ -32,7 +32,7 @@ void main() async {
   for (final package in dependencies.keys) {
     final res = await client.packageMetrics(package);
 
-    final derivedTags = res?.scorecard?.derivedTags;
+    final derivedTags = res.scorecard.derivedTags;
 
     if (derivedTags == null &&
         !['flutter', 'flutter_localizations'].contains(package)) {
